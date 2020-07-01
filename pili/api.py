@@ -1,6 +1,6 @@
 from .auth import auth_interface
 import pili.conf as conf
-from urllib2 import Request
+from urllib.request import Request
 import json
 import base64
 
@@ -64,7 +64,7 @@ def create_stream(hub, **kwargs):
 
 @auth_interface
 def get_stream(hub, key):
-    key = base64.urlsafe_b64encode(key)
+    key = base64.urlsafe_b64encode(key.encode()).decode(encoding='utf-8')
     url = "http://%s/%s/hubs/%s/streams/%s" % (conf.API_HOST, conf.API_VERSION, hub, key)
     return Request(url=url)
 
@@ -88,7 +88,7 @@ def batch_live_status(hub, streams):
 
 @auth_interface
 def disable_stream(hub, key, till):
-    key = base64.urlsafe_b64encode(key)
+    key = base64.urlsafe_b64encode(key.encode()).decode(encoding='utf-8')
     url = "http://%s/%s/hubs/%s/streams/%s/disabled" % (conf.API_HOST, conf.API_VERSION, hub, key)
     encoded = json.dumps({"disabledTill": till})
     return Request(url=url, data=encoded)
@@ -96,7 +96,7 @@ def disable_stream(hub, key, till):
 
 @auth_interface
 def get_status(hub, key):
-    key = base64.urlsafe_b64encode(key)
+    key = base64.urlsafe_b64encode(key.encode()).decode(encoding='utf-8')
     url = "http://%s/%s/hubs/%s/streams/%s/live" % (conf.API_HOST, conf.API_VERSION, hub, key)
     return Request(url=url)
 
@@ -105,7 +105,7 @@ def get_status(hub, key):
 def stream_saveas(hub, key, **kwargs):
     keyword = ['start', 'end', 'fname', 'format', 'pipeline', 'notify', 'expireDays']
     encoded = json.dumps(normalize(kwargs, keyword))
-    key = base64.urlsafe_b64encode(key)
+    key = base64.urlsafe_b64encode(key.encode()).decode(encoding='utf-8')
     url = "http://%s/%s/hubs/%s/streams/%s/saveas" % (conf.API_HOST, conf.API_VERSION, hub, key)
     return Request(url=url, data=encoded)
 
@@ -114,7 +114,7 @@ def stream_saveas(hub, key, **kwargs):
 def stream_snapshot(hub, key, **kwargs):
     keyword = ['time', 'fname', 'format']
     encoded = json.dumps(normalize(kwargs, keyword))
-    key = base64.urlsafe_b64encode(key)
+    key = base64.urlsafe_b64encode(key.encode()).decode(encoding='utf-8')
     url = "http://%s/%s/hubs/%s/streams/%s/snapshot" % (conf.API_HOST, conf.API_VERSION, hub, key)
     return Request(url=url, data=encoded)
 
@@ -123,7 +123,7 @@ def stream_snapshot(hub, key, **kwargs):
 def get_history(hub, key, **kwargs):
     keyword = ['start', 'end']
     args = normalize(kwargs, keyword)
-    key = base64.urlsafe_b64encode(key)
+    key = base64.urlsafe_b64encode(key.encode()).decode(encoding='utf-8')
     url = "http://%s/%s/hubs/%s/streams/%s/historyactivity?" % (conf.API_HOST, conf.API_VERSION, hub, key)
     for k, v in args.items():
         url += "&%s=%s" % (k, v)
@@ -132,7 +132,7 @@ def get_history(hub, key, **kwargs):
 
 @auth_interface
 def update_stream_converts(hub, key, profiles):
-    key = base64.urlsafe_b64encode(key)
+    key = base64.urlsafe_b64encode(key.encode()).decode(encoding='utf-8')
     url = "http://%s/%s/hubs/%s/streams/%s/converts" % (conf.API_HOST, conf.API_VERSION, hub, key)
     encoded = json.dumps({"converts": profiles})
     return Request(url=url, data=encoded)
